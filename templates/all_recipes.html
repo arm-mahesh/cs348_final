@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Recipes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        li a {
+            text-decoration: none;
+            color: #333;
+        }
+        li a:hover {
+            text-decoration: underline;
+        }
+        .action-links {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>All Recipes</h1>
+    {% if count is defined %}
+        <p>Number of Recipes: {{ count }}</p>
+        <p>Percent of all recipes: {{ percent }}%</p>
+        <p>Most Commonly Used Amount: {{ most_common_amount }} </p>
+    {% endif %}
+    <form action="{{ url_for('search_recipes') }}" method="get">
+        <select name="ingredient">
+            <option value="">Select Ingredient</option>
+            {% for ingredient in ingredients %}
+                <option value="{{ ingredient }}">{{ ingredient }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Search</button>
+    </form>
+    <ul>
+        {% for recipe_id, recipe_name in recipes %}
+            <li>
+                <a href="{{ url_for('recipe', recipe_id=recipe_id) }}">{{ recipe_name }}</a>
+                <span class="action-links">
+                    <a href="{{ url_for('update_recipe', recipe_id=recipe_id) }}">Update</a>
+                    <a href="{{ url_for('delete_recipe', recipe_id=recipe_id) }}" onclick="return confirm('Are you sure you want to delete this recipe?')">Delete</a>
+                </span>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

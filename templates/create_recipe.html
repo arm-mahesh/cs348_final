@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Recipe</title>
+</head>
+<body>
+    <h1>Create Recipe</h1>
+    <form method="post" action="{{ url_for('create_recipe') }}">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+        <label for="prep_time">Prep Time (minutes):</label>
+        <input type="number" id="prep_time" name="prep_time" required><br><br>
+        <label for="cook_time">Cook Time (minutes):</label>
+        <input type="number" id="cook_time" name="cook_time" required><br><br>
+
+        <h2>Ingredients</h2>
+        <div id="ingredients">
+            <div class="ingredient">
+                <input type="text" name="ingredient_name[]" placeholder="Ingredient name" required>
+                <input type="text" name="ingredient_quantity[]" placeholder="Quantity" required>
+                <button type="button" class="removeIngredient">Remove</button>
+            </div>
+        </div>
+        <button type="button" id="addIngredient">Add Ingredient</button><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        document.getElementById('addIngredient').addEventListener('click', function () {
+            var ingredientsDiv = document.getElementById('ingredients');
+            var ingredientDiv = document.createElement('div');
+            ingredientDiv.classList.add('ingredient');
+            ingredientDiv.innerHTML = `
+                <input type="text" name="ingredient_name[]" placeholder="Ingredient name" required>
+                <input type="text" name="ingredient_quantity[]" placeholder="Quantity" required>
+                <button type="button" class="removeIngredient">Remove</button>
+            `;
+            ingredientsDiv.appendChild(ingredientDiv);
+        });
+
+        document.getElementById('recipeForm').addEventListener('click', function (e) {
+            if (e.target.classList.contains('removeIngredient')) {
+                e.target.parentElement.remove();
+            }
+        });
+    </script>
+</body>
+</html>
