@@ -179,5 +179,26 @@ def delete_recipe(recipe_id):
         return "Recipe not found", 404
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    import os
+    from gunicorn.app.base import BaseApplication
+
+    class FlaskApp(BaseApplication):
+        def __init__(self, app, options=None):
+            self.options = options or {}
+            self.application = app
+            super().__init__()
+
+        def load_config(self):
+            for key, value in self.options.items():
+                self.cfg.set(key, value)
+
+        def load(self):
+            return self.application
+
+    options = {
+        'bind': '0.0.0.0:' + str(os.environ.get('PORT', 5000)),
+        'workers': 4,
+    }
+
+    FlaskApp(app, options).run()
+
