@@ -193,6 +193,7 @@ if __name__ == '__main__':
                 self.cfg.set(key, value)
 
         def load(self):
+            print("")
             return self.application
 
     options = {
